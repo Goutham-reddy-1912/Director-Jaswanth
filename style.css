@@ -128,7 +128,7 @@ section[id]{scroll-margin-top:var(--s8)}
 }
 
 /* line-mask reveal, used for the opening titles */
-.line{display:block;overflow:hidden;padding-bottom:.04em}
+.line{display:block;overflow:hidden;padding-bottom:.04em;white-space:nowrap}
 .line > span{
   display:block;
   transform:translate3d(0,110%,0);
@@ -473,8 +473,12 @@ body.is-ready .nav{
 .hero{
   position:relative;
   min-height:100svh;
-  display:grid;align-items:center;
-  padding:clamp(104px,14vh,152px) var(--gutter) clamp(56px,9vh,112px);
+  /* the padding is held in variables so the shot can cancel it and run
+     the full height of the section */
+  --hero-pt:clamp(104px,14vh,152px);
+  --hero-pb:clamp(56px,9vh,112px);
+  display:grid;
+  padding:var(--hero-pt) var(--gutter) var(--hero-pb);
   overflow:hidden;
   isolation:isolate;
 }
@@ -529,15 +533,16 @@ body.is-ready .hero__atmos{opacity:.34}
   position:relative;
   width:100%;max-width:var(--maxw);margin-inline:auto;
   display:grid;
-  /* the shot column sizes itself to the frame; the type takes what's left */
-  grid-template-columns:minmax(0,1fr) auto;
-  grid-template-areas:
-    "text shot"
-    "say  shot"
-    "foot shot";
+  /* single column — the shot is a layer behind the type, not a column */
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"text" "say" "foot";
   align-content:center;
-  align-items:center;
-  column-gap:clamp(32px,4.5vw,80px);
+  justify-items:start;
+}
+.hero__inner,.hero__say,.hero__foot{
+  position:relative;
+  z-index:1;                       /* type always above the frame */
+  max-width:min(54%,660px);        /* the left ~45–50% of the hero */
 }
 .hero__inner{
   grid-area:text;
@@ -547,26 +552,28 @@ body.is-ready .hero__atmos{opacity:.34}
 }
 .hero__foot{
   grid-area:foot;
-  align-self:start;
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:var(--s3) var(--s5);
   margin-top:var(--s7);
   /* scroll-driven only — no transition here, or it would lag the camera.
-     The entry fade lives on the two children instead. */
+     The entry fade lives on the children instead. */
   transform:translate3d(0,var(--camY,0px),0);
   opacity:var(--camO,1);
 }
 
 /* ---------- THE OPENING SHOT ---------- */
 .shot{
-  grid-area:shot;
-  position:relative;
-  /* Sized by HEIGHT, not width: it takes most of the hero's vertical space,
-     and the 4:5 ratio derives the width from that. Bleeds a little past the
-     content grid on the right so the composition reads editorial, not boxed. */
-  height:min(74svh,820px);
-  aspect-ratio:4/5;
-  justify-self:end;
-  margin:0 calc(var(--gutter) * -0.45) 0 0;
-  /* parallax + the camera pulling away as the scene ends (set in JS) */
+  /* Full height of the hero (it cancels the section padding) and bleeding
+     off the right edge of the VIEWPORT, not the content grid: right:50% puts
+     its right edge at the centre line, then -50vw pushes it to the edge. */
+  position:absolute;
+  z-index:0;
+  top:calc(var(--hero-pt) * -1);
+  bottom:calc(var(--hero-pb) * -1);
+  right:50%;
+  margin-right:-50vw;
+  width:min(60vw,1120px);
+  /* parallax + the camera easing away as the scene ends (set in JS) */
   transform:translate3d(var(--shotX,0px),var(--shotY,0px),0) scale(var(--shotS,1));
   opacity:var(--shotO,1);
   will-change:transform;
@@ -575,85 +582,93 @@ body.is-ready .hero__atmos{opacity:.34}
    from the black, so this does — warm, wide, and almost invisible. */
 .shot__halo{
   position:absolute;
-  inset:-14% -10% -8% -12%;
+  inset:0;
   z-index:-1;
   background:
-    radial-gradient(52% 44% at 54% 30%,rgba(216,163,76,.20),transparent 72%),
-    radial-gradient(72% 60% at 50% 52%,rgba(120,116,110,.14),transparent 78%);
-  filter:blur(42px);
+    radial-gradient(42% 30% at 58% 24%,rgba(216,163,76,.22),transparent 74%),
+    radial-gradient(64% 52% at 54% 44%,rgba(120,116,110,.12),transparent 80%);
+  filter:blur(48px);
   opacity:0;
   transition:opacity 2s var(--e-io) .5s;
 }
 body.is-ready .shot__halo{opacity:.82}
 
+/* no border, no radius, no card — just the frame, revealed from the right
+   by a soft mask sweep, then drifting on a very slow push-in */
 .shot__frame{
   position:relative;
   height:100%;
-  border:1px solid var(--line);
-  border-radius:var(--r);
-  overflow:hidden;
-  background:#050506;
-  /* floats above the atmosphere rather than sitting on it */
-  box-shadow:
-    0 2px 1px rgba(239,236,229,.05),
-    0 40px 80px -40px rgba(0,0,0,.9),
-    0 90px 140px -70px #000;
-  opacity:0;
-  transform:translate3d(0,20px,0);
-  transition:opacity 1.2s var(--e-io) .35s,transform 1.4s var(--e) .35s;
+  -webkit-mask-image:linear-gradient(102deg,transparent 36%,#000 54%);
+          mask-image:linear-gradient(102deg,transparent 36%,#000 54%);
+  -webkit-mask-size:300% 100%;   mask-size:300% 100%;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:0 0;     mask-position:0 0;
+  transition:-webkit-mask-position 1.6s var(--e-cine) .35s,
+             mask-position 1.6s var(--e-cine) .35s;
 }
 body.is-ready .shot__frame{
-  opacity:1;
-  transform:none;
-  /* then it just breathes */
-  animation:breathe 11s ease-in-out 2.6s infinite;
+  -webkit-mask-position:100% 0; mask-position:100% 0;
+  animation:drift 26s ease-in-out 2.6s infinite;
 }
-@keyframes breathe{
-  0%,100%{transform:translate3d(0,0,0)}
-  50%{transform:translate3d(0,-6px,0)}
+/* the long, almost unnoticeable camera push */
+@keyframes drift{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.02)}
 }
 
-/* LAYER 4 · metadata: two marks, opposite corners, easy to miss */
-.shot__tags{position:absolute;inset:0;pointer-events:none}
+/* a scrim over the image keeps the headline readable
+   no matter how bright the frame gets */
+.shot__scrim{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,var(--black) 0%,rgba(5,5,6,.72) 26%,transparent 58%),
+    linear-gradient(0deg,var(--black) 0%,transparent 26%);
+}
+
+/* LAYER 4 · metadata: two marks, easy to miss */
 .shot__tag{
-  position:absolute;
+  position:absolute;z-index:1;
   display:flex;align-items:center;gap:6px;
   font-size:.54rem;letter-spacing:.22em;
-  color:rgba(239,236,229,.5);
-  text-shadow:0 1px 6px rgba(0,0,0,.9);
+  color:rgba(239,236,229,.45);
+  text-shadow:0 1px 8px rgba(0,0,0,.95);
   opacity:0;
   transition:opacity 1.2s var(--e-io) 2.3s;
 }
-.shot__tag:first-child{top:var(--s3);left:var(--s3)}
-.shot__tag:last-child{bottom:var(--s3);right:var(--s3)}
 body.is-ready .shot__tag{opacity:1}
+.shot__tag--frame{top:calc(var(--hero-pt) + var(--s2));right:calc(var(--gutter) + var(--s6))}
+.shot__tag--cut{
+  bottom:calc(var(--hero-pb) + var(--s4));
+  right:var(--s3);
+  writing-mode:vertical-rl;
+  letter-spacing:.3em;
+}
 
 /* NOTE the doubled-up selectors below (.shot .shot__img). The generic .still
    rules are defined later in this file, so plain .shot__img would lose the
    cascade on --focus-blur and --zoom and the reveal would never animate. */
 .shot .shot__img{
   height:100%;
-  --focus-blur:14px;
-  --zoom:1.04;
-  /* A SOFT mask wipe, opening the way the projector light falls. Driven by
-     mask-position rather than a registered custom property, so a browser
-     without @property still shows the image instead of hiding it. */
-  -webkit-mask-image:linear-gradient(102deg,#000 46%,transparent 64%);
-          mask-image:linear-gradient(102deg,#000 46%,transparent 64%);
-  -webkit-mask-size:300% 100%;  mask-size:300% 100%;
-  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-  -webkit-mask-position:100% 0;  mask-position:100% 0;
-  transition:-webkit-mask-position 1.5s var(--e-cine) .4s,
-             mask-position 1.5s var(--e-cine) .4s;
+  --focus-blur:16px;
+  --zoom:1.05;
+  /* THE DISSOLVE. Left edge and bottom fall away, so there is no rectangular
+     boundary anywhere near the type — the frame emerges out of the dark.
+     Two mask layers intersected; if mask-composite is unsupported they union
+     instead, which fades less but never hides the image. */
+  -webkit-mask-image:
+    linear-gradient(90deg,transparent 0%,rgba(0,0,0,.42) 20%,#000 54%),
+    linear-gradient(0deg,transparent 0%,#000 22%);
+          mask-image:
+    linear-gradient(90deg,transparent 0%,rgba(0,0,0,.42) 20%,#000 54%),
+    linear-gradient(0deg,transparent 0%,#000 22%);
+  -webkit-mask-composite:source-in;
+          mask-composite:intersect;
 }
 body.is-ready .shot__img{
-  -webkit-mask-position:0 0; mask-position:0 0;
   --focus-blur:0px;
   --zoom:1;
-  transition:-webkit-mask-position 1.5s var(--e-cine) .4s,
-             mask-position 1.5s var(--e-cine) .4s,
-             --focus-blur 1.4s var(--e-io) .5s,
-             --zoom 1.8s var(--e) .5s;
+  transition:--focus-blur 1.5s var(--e-io) .55s,
+             --zoom 2s var(--e) .55s;
 }
 /* cursor-tracked drift + a touch more light on hover */
 .shot .shot__img > img{
@@ -702,9 +717,10 @@ body.is-ready .line > span{transform:none}
 
 .hero__title{
   margin:var(--s4) 0 var(--s3);
-  /* rebalanced: the frame carries more of the hero now, so the name sizes
-     to its column instead of running under the image */
-  font-size:clamp(2.5rem,8.6vw,8.5rem);
+  /* Sized to the left column. The ceiling is deliberate: .line uses
+     overflow:hidden for the mask reveal, so "JASWANTH" overrunning its
+     container would clip rather than wrap. 8rem keeps ~7% headroom. */
+  font-size:clamp(2.6rem,9vw,8rem);
   font-weight:800;
   letter-spacing:-.045em;
   line-height:.87;
@@ -742,23 +758,23 @@ body.is-ready .line > span{transform:none}
 
 .hero__scroll{
   display:inline-flex;align-items:center;gap:var(--s2);
-  margin-top:var(--s6);
 }
 .hero__scroll span{font-size:.6rem;letter-spacing:.24em;transition:color var(--t)}
 .hero__scroll:hover span{color:var(--fg)}
+/* a slow light travelling along a hairline — reads as "keep going" */
 .hero__scroll-line{
-  display:block;width:1px;height:34px;
-  background:linear-gradient(180deg,var(--line-2),transparent);
+  display:block;width:56px;height:1px;
+  background:var(--line-2);
   position:relative;overflow:hidden;
 }
 .hero__scroll-line::after{
-  content:'';position:absolute;top:0;left:0;width:100%;height:40%;
+  content:'';position:absolute;top:0;left:0;height:100%;width:38%;
   background:var(--accent);
-  animation:railDrop 2.6s var(--e-io) infinite;
+  animation:railSweep 3s var(--e-io) infinite;
 }
-@keyframes railDrop{
-  0%{transform:translateY(-100%)}
-  60%,100%{transform:translateY(260%)}
+@keyframes railSweep{
+  0%{transform:translateX(-100%)}
+  62%,100%{transform:translateX(265%)}
 }
 
 /* ---------- 06 · SCENE FURNITURE ---------- */
@@ -1560,12 +1576,13 @@ body.is-ready .line > span{transform:none}
 
 /* ---------- 15 · RESPONSIVE ---------- */
 
-/* narrow desktop: the type column gets tight beside a tall frame,
-   so both step down together rather than colliding */
-@media (min-width:881px) and (max-width:1120px){
-  .shot{height:min(64svh,620px)}
-  .hero__title{font-size:clamp(2.5rem,7.2vw,6rem)}
-  .hero__atmos{width:70vw}
+/* tablet / narrow desktop: same split, image gives back a little width
+   so the type never crowds the subject */
+@media (min-width:881px) and (max-width:1180px){
+  .shot{width:54vw}
+  .hero__inner,.hero__say,.hero__foot{max-width:min(58%,520px)}
+  .hero__title{font-size:clamp(2.6rem,8.2vw,6.5rem)}
+  .shot__tag--frame{right:calc(var(--gutter) + var(--s3))}
 }
 
 @media (max-width:1080px){
@@ -1580,24 +1597,39 @@ body.is-ready .line > span{transform:none}
 @media (max-width:880px){
   .about__grid{grid-template-columns:1fr}
   .portrait{order:-1;max-width:420px}
-  /* dedicated mobile composition:
+  /* dedicated mobile composition — the shot comes back into the flow:
      name → role → image → statement → CTA */
   .hero__grid{
     grid-template-columns:minmax(0,1fr);
     grid-template-areas:"text" "shot" "say" "foot";
     row-gap:var(--s6);
+    justify-items:stretch;
   }
+  .hero__inner,.hero__say,.hero__foot{max-width:none}
   .shot{
-    /* width-driven here, holding 84% of the screen — still the loudest
-       thing on the page after the name */
-    width:min(84%,430px);
-    height:auto;
-    margin:0;
+    /* relative, not static — the corner tag is positioned against it */
+    position:relative;
+    grid-area:shot;
+    inset:auto;
+    /* holds 86% of the screen — still the loudest thing after the name */
+    width:min(86%,430px);
+    aspect-ratio:4/5;
+    margin:0 auto;
     justify-self:center;
   }
+  /* no left dissolve here — the frame stands on its own, so it fades
+     downward into the page instead of sideways into the type */
+  .shot .shot__img{
+    -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 18%);
+            mask-image:linear-gradient(0deg,transparent 0%,#000 18%);
+    -webkit-mask-composite:source-over; mask-composite:add;
+  }
+  .shot__scrim{background:linear-gradient(0deg,var(--black) 0%,transparent 30%)}
+  .shot__tag--frame{top:var(--s3);left:var(--s3);right:auto}
+  .shot__tag--cut{display:none}
   .hero__say,.hero__foot{margin-top:0}
   .hero__atmos{display:none}   /* a 76px blur is not worth it on a phone */
-  .shot__halo{inset:-8% -6%;filter:blur(32px)}
+  .shot__halo{filter:blur(34px)}
   .tool{grid-template-columns:36px minmax(0,1fr);gap:var(--s3)}
   .tool__viz{grid-column:2;justify-content:flex-start;height:26px}
   .viz-lines{align-items:flex-start}
@@ -1706,8 +1738,9 @@ body.is-ready .line > span{transform:none}
   .hero__glow,.hero__beam,.shot__halo{opacity:1}
   .shot,.shot__frame,.shot__tag{opacity:1;transform:none}
   .shot__frame{animation:none}
-  .shot .shot__img,body.is-ready .shot__img{
-    -webkit-mask-position:0 0;mask-position:0 0}
+  /* the frame's reveal mask must land OPEN, or the image stays hidden */
+  .shot__frame,body.is-ready .shot__frame{
+    -webkit-mask-position:100% 0;mask-position:100% 0}
   .still__sweep{display:none}
   .rec{animation:none}
   .endroll{height:auto}

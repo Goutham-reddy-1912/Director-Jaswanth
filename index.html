@@ -32,7 +32,8 @@
       opacity:1 !important;transform:none !important}
     .hero__atmos{opacity:.34 !important}
     .still,.shot__img{--focus-blur:0px !important;--zoom:1 !important}
-    .shot__img{-webkit-mask-position:0 0 !important;mask-position:0 0 !important}
+    /* the reveal mask must land open, or the frame stays hidden */
+    .shot__frame{-webkit-mask-position:100% 0 !important;mask-position:100% 0 !important}
     .endroll{height:auto !important}
     .endroll__viewport{position:static !important;height:auto !important;padding:6rem 0;mask:none;-webkit-mask:none}
     .endroll__inner{transform:none !important}
@@ -175,31 +176,29 @@
     </div>
 
     <!-- ================= LAYER 3 · THE OPENING SHOT =================
-         assets/Imgs/imgg_1.png — a graded studio frame, so it gets the
-         light `--native` treatment, never the rescue grade built for flat
-         snapshots. The 4:5 window crops 2% off the top and 12% off the
-         bottom of the 2:3 source: 6% headroom above the head, cut at
-         mid-thigh. Subject intact, nothing stretched. -->
+         assets/Imgs/imgg_1.png — no card, no border. It runs the full
+         height of the hero, bleeds off the right edge of the viewport,
+         and dissolves into the black on its left so the type sits in
+         darkness rather than on top of a rectangle.
+         `--native` treatment: this frame arrives already graded. -->
     <figure class="shot" id="shot">
       <span class="shot__halo" aria-hidden="true"></span>
 
       <div class="shot__frame" data-cursor="VIEW FRAME">
         <div class="shot__img still still--native"
-             style="--focus-x:56%; --focus-y:19%; --origin-y:22%; --crop-y:12%">
+             style="--focus-x:56%; --focus-y:19%; --origin-y:24%; --crop-y:8%">
           <img src="assets/Imgs/imgg_1.png"
                alt="Alam Jaswanth, photographed against a dark studio backdrop"
                fetchpriority="high" decoding="async">
           <span class="still__grain" aria-hidden="true"></span>
           <span class="still__sweep" aria-hidden="true"></span>
-          <span class="still__edge"  aria-hidden="true"></span>
         </div>
-
-        <!-- LAYER 4 · metadata. Two marks, nothing more. -->
-        <div class="shot__tags" aria-hidden="true">
-          <span class="shot__tag meta"><i class="rec"></i>Frame 01</span>
-          <span class="shot__tag meta">Director’s Cut</span>
-        </div>
+        <span class="shot__scrim" aria-hidden="true"></span>
       </div>
+
+      <!-- LAYER 4 · metadata. Two marks, nothing more. -->
+      <span class="shot__tag shot__tag--frame meta" aria-hidden="true"><i class="rec"></i>Frame 01</span>
+      <span class="shot__tag shot__tag--cut meta" aria-hidden="true">Director’s Cut</span>
     </figure>
 
     <div class="hero__say">
@@ -211,15 +210,12 @@
     <div class="hero__foot">
       <div class="hero__cta">
         <a class="btn btn--solid" href="#work" data-cursor="OPEN">
-          View the work <i class="btn__arrow" aria-hidden="true">→</i>
-        </a>
-        <a class="btn" href="#contact" data-cursor="OPEN">
-          Get in touch <i class="btn__arrow" aria-hidden="true">→</i>
+          Explore my work <i class="btn__arrow" aria-hidden="true">→</i>
         </a>
       </div>
 
       <a class="hero__scroll" href="#about">
-        <span class="meta">Explore the story</span>
+        <span class="meta">Scroll to discover</span>
         <i class="hero__scroll-line" aria-hidden="true"></i>
       </a>
     </div>
