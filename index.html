@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alam Jaswanth — Aspiring Film Maker</title>
-<meta name="description" content="Alam Jaswanth — Assistant Director &amp; aspiring film maker. Screenplay writing, script development, continuity, edit log, costumes, properties and pre-production.">
+<meta name="description" content="Alam Jaswanth — Assistant Director and aspiring film maker. Screenplay writing, script development, continuity, edit log, costumes, properties and pre-production.">
 <meta name="theme-color" content="#050505">
 
 <meta property="og:type" content="website">
@@ -13,7 +13,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/Imgs/imgg_1.png" fetchpriority="high">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -23,21 +24,25 @@
   <style>
     html.is-locked,body.is-loading{overflow:auto !important}
     .projector,.cursor,.grain{display:none !important}
-    .reveal,.tl-item,.gear,.credit,.film,.sp-line{opacity:1 !important;transform:none !important;filter:none !important}
-    .mask > span{transform:none !important}
-    .nav{opacity:1 !important;transform:none !important}
+    [data-reveal],.line > span,.tl-item,.tl-card,.tool,.credit,.film,.note__line{
+      opacity:1 !important;transform:none !important;filter:none !important}
+    .nav{pointer-events:auto !important}
+    .nav,.hero__inner,.hero__foot,.hero__say,.hero__eyebrow,.hero__statement,
+    .hero__cta,.hero__scroll,.shot,.shot__frame,.shot__tag,.shot__halo{
+      opacity:1 !important;transform:none !important}
+    .hero__atmos{opacity:.34 !important}
+    .still,.shot__img{--focus-blur:0px !important;--zoom:1 !important}
+    .shot__img{-webkit-mask-position:0 0 !important;mask-position:0 0 !important}
     .endroll{height:auto !important}
     .endroll__viewport{position:static !important;height:auto !important;padding:6rem 0;mask:none;-webkit-mask:none}
     .endroll__inner{transform:none !important}
-    .endroll__begin{opacity:.95 !important;filter:none !important;transform:none !important}
-    .hero__inner{transform:none !important;opacity:1 !important}
   </style>
 </noscript>
 
 <a class="skip-link" href="#about">Skip the opening sequence</a>
 
 <!-- ============================================================
-     REEL 00 · CINEMATIC LOADING SCREEN
+     REEL 00 · LOADING — THE PROJECTOR
      ============================================================ -->
 <div class="projector" id="projector" role="status" aria-live="polite" aria-label="Loading">
   <div class="projector__beam" aria-hidden="true"></div>
@@ -45,11 +50,10 @@
 
   <div class="projector__stage">
     <svg class="machine" viewBox="0 0 240 150" aria-hidden="true" focusable="false">
-      <!-- vintage projector: body, lens, two spinning reels -->
       <g class="machine__reel machine__reel--a">
         <circle cx="74" cy="42" r="26" class="ln"/>
-        <circle cx="74" cy="42" r="6"  class="ln"/>
-        <g class="spokes">
+        <circle cx="74" cy="42" r="6" class="ln"/>
+        <g>
           <line x1="74" y1="22" x2="74" y2="30" class="ln"/>
           <line x1="74" y1="54" x2="74" y2="62" class="ln"/>
           <line x1="54" y1="42" x2="62" y2="42" class="ln"/>
@@ -63,88 +67,78 @@
       <g class="machine__reel machine__reel--b">
         <circle cx="140" cy="50" r="18" class="ln"/>
         <circle cx="140" cy="50" r="4.5" class="ln"/>
-        <g class="spokes">
+        <g>
           <line x1="140" y1="36" x2="140" y2="41" class="ln"/>
           <line x1="140" y1="59" x2="140" y2="64" class="ln"/>
           <line x1="126" y1="50" x2="131" y2="50" class="ln"/>
           <line x1="149" y1="50" x2="154" y2="50" class="ln"/>
         </g>
       </g>
-      <!-- film path between reels -->
-      <path class="machine__film" d="M74 68 C 78 92, 118 92, 140 68" pathLength="100"/>
-      <!-- body -->
+      <path class="machine__film" d="M74 68 C 78 92, 118 92, 140 68"/>
       <path class="ln" d="M56 96 h108 a8 8 0 0 1 8 8 v22 a4 4 0 0 1 -4 4 H52 a4 4 0 0 1 -4 -4 v-22 a8 8 0 0 1 8 -8 z"/>
-      <!-- lens -->
       <path class="ln" d="M172 104 l24 -9 v33 l-24 -9 z"/>
       <circle class="machine__glow" cx="196" cy="111" r="4"/>
-      <!-- legs -->
       <line class="ln" x1="66" y1="130" x2="62" y2="140"/>
       <line class="ln" x1="154" y1="130" x2="158" y2="140"/>
       <line class="ln" x1="46" y1="141" x2="176" y2="141"/>
     </svg>
 
-    <p class="projector__status" id="loadStatus">Preparing the story...</p>
+    <p class="projector__status" id="loadStatus">Preparing the story</p>
 
     <div class="projector__meter" aria-hidden="true"><i id="loadBar"></i></div>
 
-    <div class="projector__foot">
-      <span class="mono">REEL 01</span>
-      <span class="mono" id="loadPct">00</span>
-      <span class="mono">24 FPS</span>
+    <div class="projector__foot meta">
+      <span>Reel 01</span>
+      <span id="loadPct">00</span>
+      <span>24 fps</span>
     </div>
   </div>
 
-  <!-- film shutter used for the reveal -->
   <div class="shutter" aria-hidden="true">
     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
   </div>
 </div>
 
-<!-- global cinematic overlays -->
 <div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 <div class="gate-flash" aria-hidden="true"></div>
 
-<!-- custom cursor -->
 <div class="cursor" aria-hidden="true">
   <div class="cursor__dot"></div>
   <div class="cursor__ring"><span class="cursor__label"></span></div>
 </div>
 
 <!-- ============================================================
-     PRODUCTION INTERFACE · NAVIGATION
+     NAVIGATION
      ============================================================ -->
 <header class="nav" id="nav">
-  <a class="nav__mark" href="#home" data-cursor="frame" aria-label="Alam Jaswanth — home">
+  <a class="nav__mark" href="#home" data-cursor="OPEN" aria-label="Alam Jaswanth — back to the opening">
     <span class="nav__reel" id="navReel" aria-hidden="true">
       <svg viewBox="0 0 40 40" focusable="false">
-        <circle cx="20" cy="20" r="17"/><circle cx="20" cy="20" r="3.4"/>
-        <circle cx="20" cy="10" r="3"/><circle cx="20" cy="30" r="3"/>
-        <circle cx="10" cy="20" r="3"/><circle cx="30" cy="20" r="3"/>
+        <circle cx="20" cy="20" r="16.5"/><circle cx="20" cy="20" r="3.2"/>
+        <circle cx="20" cy="10.5" r="2.6"/><circle cx="20" cy="29.5" r="2.6"/>
+        <circle cx="10.5" cy="20" r="2.6"/><circle cx="29.5" cy="20" r="2.6"/>
       </svg>
     </span>
-    <span class="nav__mark-txt">
-      <b>A. JASWANTH</b>
-      <i class="mono">PROD. PORTFOLIO</i>
+    <span class="nav__wordmark">
+      <b>Alam Jaswanth</b>
+      <i class="meta">Aspiring Film Maker</i>
     </span>
   </a>
 
-  <nav class="nav__links" id="navLinks" aria-label="Scene selection">
-    <a href="#home"       data-cursor="frame"><i class="mono">01</i>Home</a>
-    <a href="#about"      data-cursor="frame"><i class="mono">02</i>About</a>
-    <a href="#experience" data-cursor="frame"><i class="mono">03</i>Experience</a>
-    <a href="#projects"   data-cursor="frame"><i class="mono">04</i>Projects</a>
-    <a href="#skills"     data-cursor="frame"><i class="mono">05</i>Skills</a>
-    <a href="#education"  data-cursor="frame"><i class="mono">06</i>Education</a>
-    <a href="#contact"    data-cursor="frame"><i class="mono">07</i>Contact</a>
+  <nav class="nav__links" id="navLinks" aria-label="Sections">
+    <a href="#home"       data-cursor="OPEN"><i class="meta">01</i><span>Home</span></a>
+    <a href="#about"      data-cursor="OPEN"><i class="meta">02</i><span>About</span></a>
+    <a href="#experience" data-cursor="OPEN"><i class="meta">03</i><span>Experience</span></a>
+    <a href="#work"       data-cursor="OPEN"><i class="meta">04</i><span>Work</span></a>
+    <a href="#skills"     data-cursor="OPEN"><i class="meta">05</i><span>Skills</span></a>
+    <a href="#contact"    data-cursor="OPEN"><i class="meta">06</i><span>Contact</span></a>
   </nav>
 
-  <div class="nav__hud mono" aria-hidden="true">
-    <span class="rec"></span><span id="hudScene">SC 01</span>
-  </div>
+  <p class="nav__count meta" aria-hidden="true"><b id="navIndex">01</b><i>/</i><span>06</span></p>
 
-  <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open scene menu">
-    <i></i><i></i><i></i>
+  <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+    <i></i><i></i>
   </button>
 </header>
 
@@ -153,83 +147,131 @@
 <main id="main">
 
 <!-- ============================================================
-     SCENE 01 · HERO — THE STORY BEGINS
+     00 · OPENING SHOT
      ============================================================ -->
-<section class="hero" id="home">
+<section class="hero" id="home" data-nav="1">
   <div class="hero__bg" aria-hidden="true">
-    <div class="hero__beam hero__beam--1"></div>
-    <div class="hero__beam hero__beam--2"></div>
-    <div class="hero__sweep"></div>
-    <div class="hero__strip hero__strip--t"></div>
-    <div class="hero__strip hero__strip--b"></div>
+    <span class="hero__glow"></span>
+    <span class="hero__beam"></span>
+    <span class="hero__sweep"></span>
   </div>
+
+  <!-- LAYER 2 · atmosphere: the same file, blurred far past recognition,
+       so it reads as depth behind the frame rather than a second image -->
+  <div class="hero__atmos" aria-hidden="true"></div>
+
   <canvas class="hero__dust" id="dust" aria-hidden="true"></canvas>
 
-  <div class="hero__inner" id="heroInner">
-    <p class="hero__slug mono reveal">SCENE 01 &nbsp;·&nbsp; EXT. THE BEGINNING — DAWN</p>
+  <div class="hero__grid">
+    <div class="hero__inner" id="heroInner">
+      <p class="hero__eyebrow meta">Scene 00 <i>·</i> Opening Shot</p>
 
-    <h1 class="hero__title">
-      <span class="mask"><span>ALAM</span></span>
-      <span class="mask"><span>JASWANTH</span></span>
-    </h1>
+      <h1 class="hero__title">
+        <span class="line"><span>Alam</span></span>
+        <span class="line"><span>Jaswanth</span></span>
+      </h1>
 
-    <p class="hero__role"><span class="mask"><span>Aspiring Film Maker</span></span></p>
+      <p class="hero__role"><span class="line"><span>Aspiring Film Maker</span></span></p>
+    </div>
 
-    <p class="hero__line reveal" style="--d:.9s">“Turning ideas into stories, one frame at a time.”</p>
+    <!-- ================= LAYER 3 · THE OPENING SHOT =================
+         assets/Imgs/imgg_1.png — a graded studio frame, so it gets the
+         light `--native` treatment, never the rescue grade built for flat
+         snapshots. The 4:5 window crops 2% off the top and 12% off the
+         bottom of the 2:3 source: 6% headroom above the head, cut at
+         mid-thigh. Subject intact, nothing stretched. -->
+    <figure class="shot" id="shot">
+      <span class="shot__halo" aria-hidden="true"></span>
 
-    <a class="hero__scroll reveal" style="--d:1.2s" href="#about">
-      <span>Scroll to enter the story</span>
-      <i aria-hidden="true">↓</i>
-    </a>
-  </div>
+      <div class="shot__frame" data-cursor="VIEW FRAME">
+        <div class="shot__img still still--native"
+             style="--focus-x:56%; --focus-y:19%; --origin-y:22%; --crop-y:12%">
+          <img src="assets/Imgs/imgg_1.png"
+               alt="Alam Jaswanth, photographed against a dark studio backdrop"
+               fetchpriority="high" decoding="async">
+          <span class="still__grain" aria-hidden="true"></span>
+          <span class="still__sweep" aria-hidden="true"></span>
+          <span class="still__edge"  aria-hidden="true"></span>
+        </div>
 
-  <div class="hero__hud mono" aria-hidden="true">
-    <div><span class="rec"></span>REC</div>
-    <div>A · CAM 01</div>
-    <div>24 FPS · 2.39:1</div>
+        <!-- LAYER 4 · metadata. Two marks, nothing more. -->
+        <div class="shot__tags" aria-hidden="true">
+          <span class="shot__tag meta"><i class="rec"></i>Frame 01</span>
+          <span class="shot__tag meta">Director’s Cut</span>
+        </div>
+      </div>
+    </figure>
+
+    <div class="hero__say">
+      <p class="hero__statement">
+        Turning ideas into stories, <em>one frame at a time.</em>
+      </p>
+    </div>
+
+    <div class="hero__foot">
+      <div class="hero__cta">
+        <a class="btn btn--solid" href="#work" data-cursor="OPEN">
+          View the work <i class="btn__arrow" aria-hidden="true">→</i>
+        </a>
+        <a class="btn" href="#contact" data-cursor="OPEN">
+          Get in touch <i class="btn__arrow" aria-hidden="true">→</i>
+        </a>
+      </div>
+
+      <a class="hero__scroll" href="#about">
+        <span class="meta">Explore the story</span>
+        <i class="hero__scroll-line" aria-hidden="true"></i>
+      </a>
+    </div>
   </div>
 </section>
 
+<div class="cut" aria-hidden="true"></div>
+
 <!-- ============================================================
-     SCENE 02 · DIRECTOR'S NOTE
+     01 · DIRECTOR'S NOTE
      ============================================================ -->
-<section class="scene about" id="about">
-  <p class="slate mono reveal"><b>SC 02</b><span>INT. DIRECTOR’S DESK — NIGHT</span><i>TAKE 01</i></p>
+<section class="scene about" id="about" data-nav="2">
+  <header class="scene__head" data-reveal>
+    <p class="scene__index meta"><b>01</b><i>/</i><span>Introduction</span></p>
+    <h2 class="scene__title">Director’s Note</h2>
+  </header>
 
   <div class="about__grid">
-    <div class="about__text">
-      <h2 class="title title--lg reveal">Director’s<br>Note</h2>
-
-      <div class="screenplay" id="screenplay">
-        <p class="screenplay__head mono">FADE IN:</p>
-        <p class="sp-line">Seeking a <em>challenging opportunity</em> where I can utilize</p>
-        <p class="sp-line">my interested skills in <em>direction</em> and <em>script writing</em></p>
-        <p class="sp-line">which helps to tells my <em>stories</em> to the audience</p>
-        <p class="sp-line">which in turn helps me to grow personally</p>
-        <p class="sp-line">and professionally.<span class="caret" aria-hidden="true"></span></p>
+    <div class="about__body">
+      <div class="note" id="note">
+        <p class="note__line">Seeking a <em>challenging opportunity</em> where I can utilise</p>
+        <p class="note__line">my skills in <em>direction</em> and <em>script writing</em> — work that</p>
+        <p class="note__line">lets me tell my <em>stories</em> to an audience, and grow</p>
+        <p class="note__line">personally and professionally along the way.<span class="caret" aria-hidden="true"></span></p>
       </div>
 
-      <ul class="about__facts reveal" style="--d:.2s">
-        <li><i class="mono">Role</i><b>Assistant / Associate Director</b></li>
-        <li><i class="mono">Base</i><b>Tirupati, India</b></li>
-        <li><i class="mono">Craft</i><b>Screenplay · Continuity · Pre-production</b></li>
-      </ul>
+      <dl class="facts" data-reveal data-delay="1">
+        <div><dt class="meta">Role</dt><dd>Assistant &amp; Associate Director</dd></div>
+        <div><dt class="meta">Based</dt><dd>Tirupati, India</dd></div>
+        <div><dt class="meta">Craft</dt><dd>Screenplay · Continuity · Pre-production</dd></div>
+        <div><dt class="meta">Trained at</dt><dd>FTIH Film School, Hyderabad</dd></div>
+      </dl>
     </div>
 
-    <!-- Portrait: drop the photo at assets/portrait.jpg — the frame falls back
-         to an editable placeholder while the file is missing. -->
-    <figure class="portrait reveal" style="--d:.15s">
+    <!-- Same frame as the hero, deliberately a different crop: the hero
+         holds the full figure, this is a tight editorial head-and-torso.
+         One file, one request — the browser reuses the cached image. -->
+    <figure class="portrait" data-reveal>
       <div class="portrait__frame">
-        <div class="portrait__sprockets" aria-hidden="true"></div>
-        <div class="portrait__img">
-          <img src="assets/portrait.jpg" alt="Portrait of Alam Jaswanth" loading="lazy" decoding="async"
+        <span class="portrait__perf" aria-hidden="true"></span>
+        <div class="portrait__img still still--native still--portrait"
+             style="--focus-x:56%; --focus-y:20%; --zoom:1.22; --origin-y:24%; --crop-y:10%">
+          <img src="assets/Imgs/imgg_1.png" alt="Alam Jaswanth" loading="lazy" decoding="async"
                onerror="this.closest('.portrait').classList.add('is-empty')">
-          <span class="ph mono" aria-hidden="true">PORTRAIT<br><i>assets/portrait.jpg</i></span>
+          <span class="ph meta" aria-hidden="true">Portrait<i>assets/Imgs/imgg_1.png</i></span>
+          <span class="still__grain" aria-hidden="true"></span>
+          <span class="still__edge"  aria-hidden="true"></span>
         </div>
-        <div class="portrait__sprockets" aria-hidden="true"></div>
+        <span class="portrait__perf" aria-hidden="true"></span>
       </div>
-      <figcaption class="mono">
-        <span>ALAM JASWANTH</span><span>FRAME 01 / 01</span>
+      <figcaption class="meta">
+        <span>Frame 02 <i>·</i> Director’s Note</span><span>Alam Jaswanth</span>
       </figcaption>
     </figure>
   </div>
@@ -238,268 +280,241 @@
 <div class="cut" aria-hidden="true"></div>
 
 <!-- ============================================================
-     SCENE 03 · THE JOURNEY
+     02 · THE JOURNEY
      ============================================================ -->
-<section class="scene journey" id="experience">
-  <p class="slate mono reveal"><b>SC 03</b><span>MONTAGE — ON SET</span><i>TAKE 04</i></p>
-
-  <header class="scene__head">
-    <h2 class="title title--lg reveal">The Journey</h2>
-    <p class="sub reveal" style="--d:.1s">Behind the Scenes</p>
+<section class="scene journey" id="experience" data-nav="3">
+  <header class="scene__head" data-reveal>
+    <p class="scene__index meta"><b>02</b><i>/</i><span>Behind the Scenes</span></p>
+    <h2 class="scene__title">The Journey</h2>
+    <p class="scene__lead">Four sets. Four scripts. Every department you learn by carrying it yourself.</p>
   </header>
 
   <div class="timeline" id="timeline">
     <div class="timeline__rail" aria-hidden="true"><i id="timelineFill"></i></div>
 
-    <article class="tl-item" data-side="a">
+    <ol class="timeline__list">
+    <li class="tl-item">
       <span class="tl-marker" aria-hidden="true"><i></i></span>
-      <div class="tl-card">
-        <p class="tl-slug mono">01 · WEB SERIES <i>YOUTUBE</i></p>
+      <article class="tl-card">
+        <p class="tl-scene meta"><b>Scene 01</b><i>Web Series</i></p>
         <h3 class="tl-role">Assistant Director</h3>
         <p class="tl-project">Naa Boy Bestie</p>
-        <p class="tl-note">Worked as assistant director on the YouTube web series.</p>
+        <p class="tl-note">A YouTube web series — screenplay and dialogues on the page, continuity and costumes on the floor.</p>
         <ul class="tags">
           <li>Screenplay writing</li><li>Dialogue writing</li>
           <li>Edit log</li><li>Costumes</li><li>Continuity</li>
         </ul>
-      </div>
-    </article>
+      </article>
+    </li>
 
-    <article class="tl-item" data-side="b">
+    <li class="tl-item">
       <span class="tl-marker" aria-hidden="true"><i></i></span>
-      <div class="tl-card">
-        <p class="tl-slug mono">02 · INDEPENDENT FILM <i>45 MIN</i></p>
+      <article class="tl-card">
+        <p class="tl-scene meta"><b>Scene 02</b><i>Independent Film · 45 min</i></p>
         <h3 class="tl-role">Assistant Director / Co-Director</h3>
         <p class="tl-project">#FADED</p>
-        <p class="tl-note">Co-directed an independent film of 45 minutes in length.</p>
+        <p class="tl-note">Co-directed a 45-minute independent film, and wrote the entire script.</p>
         <ul class="tags">
           <li>Entire script writing</li><li>Edit log</li>
           <li>Continuity</li><li>Properties</li><li>Costumes</li>
         </ul>
-      </div>
-    </article>
+      </article>
+    </li>
 
-    <article class="tl-item" data-side="a">
+    <li class="tl-item">
       <span class="tl-marker" aria-hidden="true"><i></i></span>
-      <div class="tl-card">
-        <p class="tl-slug mono">03 · FEATURE FILM <i>UNTITLED</i></p>
+      <article class="tl-card">
+        <p class="tl-scene meta"><b>Scene 03</b><i>Feature Film</i></p>
         <h3 class="tl-role">Assistant Director</h3>
-        <p class="tl-project">Feature Film <span class="ph-tag mono">TITLE TBA</span></p>
-        <p class="tl-note">Worked on a feature film as assistant director.</p>
+        <p class="tl-project">Feature Film <span class="tba meta">Title TBA</span></p>
+        <p class="tl-note">Feature work spanning script development and the on-set departments.</p>
         <ul class="tags">
           <li>Script development</li><li>Edit log</li>
           <li>Continuity</li><li>Properties</li><li>Costumes</li>
         </ul>
-      </div>
-    </article>
+      </article>
+    </li>
 
-    <article class="tl-item" data-side="b">
+    <li class="tl-item">
       <span class="tl-marker" aria-hidden="true"><i></i></span>
-      <div class="tl-card">
-        <p class="tl-slug mono">04 · FEATURE FILM <i>UNTITLED</i></p>
+      <article class="tl-card">
+        <p class="tl-scene meta"><b>Scene 04</b><i>Feature Film</i></p>
         <h3 class="tl-role">Associate Director</h3>
-        <p class="tl-project">Feature Film <span class="ph-tag mono">TITLE TBA</span></p>
-        <p class="tl-note">Worked on a feature film as Associate Director.</p>
+        <p class="tl-project">Feature Film <span class="tba meta">Title TBA</span></p>
+        <p class="tl-note">Script development and the entire pre-production process, start to finish.</p>
         <ul class="tags">
-          <li>Script development</li><li>Entire pre-production work</li>
+          <li>Script development</li><li>Entire pre-production</li>
         </ul>
-        <p class="tl-flag mono">↳ PRODUCTION SHELVED</p>
-      </div>
-    </article>
+        <p class="tl-flag meta">Production shelved</p>
+      </article>
+    </li>
+    </ol>
   </div>
 </section>
 
 <div class="cut" aria-hidden="true"></div>
 
 <!-- ============================================================
-     SCENE 04 · THE FILMS
+     03 · THE FILMS
      ============================================================ -->
-<section class="scene films" id="projects">
-  <p class="slate mono reveal"><b>SC 04</b><span>INT. SCREENING ROOM — CONT’D</span><i>TAKE 02</i></p>
-
-  <header class="scene__head scene__head--row">
-    <div>
-      <h2 class="title title--lg reveal">The Films</h2>
-      <p class="sub reveal" style="--d:.1s">Stories I’ve Been Part Of</p>
+<section class="scene work" id="work" data-nav="4">
+  <header class="scene__head work__head">
+    <div data-reveal>
+      <p class="scene__index meta"><b>03</b><i>/</i><span>Stories I’ve Been Part Of</span></p>
+      <h2 class="scene__title">The Films</h2>
     </div>
-    <div class="films__ctrl" aria-hidden="true">
-      <button class="rail-btn" id="railPrev" type="button" aria-label="Previous film">←</button>
-      <button class="rail-btn" id="railNext" type="button" aria-label="Next film">→</button>
+    <div class="work__ctrl" aria-hidden="true">
+      <button class="icon-btn" id="railPrev" type="button" aria-label="Previous film">←</button>
+      <button class="icon-btn" id="railNext" type="button" aria-label="Next film">→</button>
     </div>
   </header>
 
-  <div class="films__rail" id="rail" tabindex="0" role="list" aria-label="Film frames — scroll horizontally">
-    <!-- FILM 01 -->
+  <div class="rail" id="rail" tabindex="0" role="list" aria-label="Films — scroll horizontally">
+
     <article class="film" role="listitem">
-      <button class="film__btn" type="button" data-cursor="VIEW FRAME" data-film="naa-boy-bestie"
-              aria-label="View project: Naa Boy Bestie">
-        <span class="film__poster">
-          <img src="assets/poster-naa-boy-bestie.jpg" alt="" loading="lazy" decoding="async"
-               onerror="this.closest('.film__poster').classList.add('is-empty')">
-          <span class="ph mono" aria-hidden="true">POSTER<br><i>assets/poster-naa-boy-bestie.jpg</i></span>
+      <button class="film__btn" type="button" data-cursor="VIEW" data-film="naa-boy-bestie">
+        <span class="film__frame">
+          <img src="assets/Imgs/poster-naa-boy-bestie.jpg" alt="" loading="lazy" decoding="async"
+               onerror="this.closest('.film__frame').classList.add('is-empty')">
+          <span class="ph meta" aria-hidden="true">Still 01<i>assets/Imgs/poster-naa-boy-bestie.jpg</i></span>
           <span class="film__grain" aria-hidden="true"></span>
           <span class="film__sweep" aria-hidden="true"></span>
-          <span class="film__play mono" aria-hidden="true">▶ VIEW PROJECT</span>
+          <span class="film__num meta" aria-hidden="true">01</span>
         </span>
         <span class="film__meta">
-          <i class="mono">01 · WEB SERIES</i>
-          <b>Naa Boy Bestie</b>
-          <em>Assistant Director</em>
+          <span class="film__top meta"><i>Web Series</i><i>YouTube</i></span>
+          <b class="film__title">Naa Boy Bestie</b>
+          <span class="film__role meta">Assistant Director</span>
+          <span class="film__view meta" aria-hidden="true">View story <i>→</i></span>
         </span>
       </button>
     </article>
 
-    <!-- FILM 02 -->
     <article class="film" role="listitem">
-      <button class="film__btn" type="button" data-cursor="VIEW FRAME" data-film="faded"
-              aria-label="View project: #FADED">
-        <span class="film__poster">
-          <img src="assets/poster-faded.jpg" alt="" loading="lazy" decoding="async"
-               onerror="this.closest('.film__poster').classList.add('is-empty')">
-          <span class="ph mono" aria-hidden="true">POSTER<br><i>assets/poster-faded.jpg</i></span>
+      <button class="film__btn" type="button" data-cursor="VIEW" data-film="faded">
+        <span class="film__frame">
+          <img src="assets/Imgs/poster-faded.jpg" alt="" loading="lazy" decoding="async"
+               onerror="this.closest('.film__frame').classList.add('is-empty')">
+          <span class="ph meta" aria-hidden="true">Still 01<i>assets/Imgs/poster-faded.jpg</i></span>
           <span class="film__grain" aria-hidden="true"></span>
           <span class="film__sweep" aria-hidden="true"></span>
-          <span class="film__play mono" aria-hidden="true">▶ VIEW PROJECT</span>
+          <span class="film__num meta" aria-hidden="true">02</span>
         </span>
         <span class="film__meta">
-          <i class="mono">02 · INDEPENDENT FILM</i>
-          <b>#FADED</b>
-          <em>Assistant Director / Co-Director</em>
+          <span class="film__top meta"><i>Independent Film</i><i>45 min</i></span>
+          <b class="film__title">#FADED</b>
+          <span class="film__role meta">Assistant Director / Co-Director</span>
+          <span class="film__view meta" aria-hidden="true">View story <i>→</i></span>
         </span>
       </button>
     </article>
 
-    <!-- FILM 03 — placeholder, details to be added -->
     <article class="film film--tba" role="listitem">
-      <button class="film__btn" type="button" data-cursor="VIEW FRAME" data-film="feature-ad"
-              aria-label="View project: untitled feature film, assistant director">
-        <span class="film__poster is-empty">
-          <span class="ph mono" aria-hidden="true">POSTER TBA<br><i>add assets/poster-feature-01.jpg</i></span>
+      <button class="film__btn" type="button" data-cursor="VIEW" data-film="feature-ad">
+        <span class="film__frame is-empty">
+          <span class="ph meta" aria-hidden="true">Still TBA<i>add assets/Imgs/poster-feature-01.jpg</i></span>
           <span class="film__grain" aria-hidden="true"></span>
           <span class="film__sweep" aria-hidden="true"></span>
-          <span class="film__play mono" aria-hidden="true">▶ VIEW PROJECT</span>
+          <span class="film__num meta" aria-hidden="true">03</span>
         </span>
         <span class="film__meta">
-          <i class="mono">03 · FEATURE FILM</i>
-          <b>Untitled Feature <span class="ph-tag mono">TBA</span></b>
-          <em>Assistant Director</em>
+          <span class="film__top meta"><i>Feature Film</i><i>Title TBA</i></span>
+          <b class="film__title">Untitled Feature</b>
+          <span class="film__role meta">Assistant Director</span>
+          <span class="film__view meta" aria-hidden="true">View story <i>→</i></span>
         </span>
       </button>
     </article>
 
-    <!-- FILM 04 — placeholder, details to be added -->
     <article class="film film--tba" role="listitem">
-      <button class="film__btn" type="button" data-cursor="VIEW FRAME" data-film="feature-assoc"
-              aria-label="View project: untitled feature film, associate director">
-        <span class="film__poster is-empty">
-          <span class="ph mono" aria-hidden="true">POSTER TBA<br><i>add assets/poster-feature-02.jpg</i></span>
+      <button class="film__btn" type="button" data-cursor="VIEW" data-film="feature-assoc">
+        <span class="film__frame is-empty">
+          <span class="ph meta" aria-hidden="true">Still TBA<i>add assets/Imgs/poster-feature-02.jpg</i></span>
           <span class="film__grain" aria-hidden="true"></span>
           <span class="film__sweep" aria-hidden="true"></span>
-          <span class="film__play mono" aria-hidden="true">▶ VIEW PROJECT</span>
+          <span class="film__num meta" aria-hidden="true">04</span>
         </span>
         <span class="film__meta">
-          <i class="mono">04 · FEATURE FILM</i>
-          <b>Untitled Feature <span class="ph-tag mono">TBA</span></b>
-          <em>Associate Director</em>
+          <span class="film__top meta"><i>Feature Film</i><i>Shelved</i></span>
+          <b class="film__title">Untitled Feature</b>
+          <span class="film__role meta">Associate Director</span>
+          <span class="film__view meta" aria-hidden="true">View story <i>→</i></span>
         </span>
       </button>
     </article>
 
-    <div class="films__end mono" aria-hidden="true">
-      <span>MORE FRAMES</span><b>COMING SOON</b>
+    <div class="rail__end meta" aria-hidden="true">
+      <span>More frames</span><b>Coming soon</b>
     </div>
   </div>
-
-  <p class="films__hint mono reveal">Drag, scroll or use ← → to move through the frames</p>
 </section>
 
 <div class="cut" aria-hidden="true"></div>
 
 <!-- ============================================================
-     SCENE 05 · TOOLS OF THE TRADE
+     04 · THE TOOLKIT
      ============================================================ -->
-<section class="scene tools" id="skills">
-  <p class="slate mono reveal"><b>SC 05</b><span>INT. PRODUCTION OFFICE — DAY</span><i>TAKE 03</i></p>
-
-  <header class="scene__head">
-    <h2 class="title title--lg reveal">Tools of the Trade</h2>
-    <p class="sub reveal" style="--d:.1s">Production Board</p>
+<section class="scene toolkit" id="skills" data-nav="5">
+  <header class="scene__head" data-reveal>
+    <p class="scene__index meta"><b>04</b><i>/</i><span>Director’s Toolkit</span></p>
+    <h2 class="scene__title">Tools of the Trade</h2>
   </header>
 
-  <div class="board">
-    <div class="board__head mono" aria-hidden="true">
-      <span>DEPT.</span><span>UNIT</span><span>STATUS</span>
-    </div>
-
-    <!-- SCREENWRITING · frame indicators illuminate sequentially -->
-    <article class="gear" data-gear="frames">
-      <p class="gear__id mono">A-01</p>
-      <div class="gear__body">
+  <ul class="tools">
+    <li class="tool" data-tool="script">
+      <span class="tool__id meta">01</span>
+      <div class="tool__body">
         <h3>Screenwriting</h3>
-        <p class="gear__note mono">SCRIPT DEPT. · FEATURE / SHORT / WEB</p>
+        <p class="tool__note">Screenplay, dialogue and script development</p>
       </div>
-      <div class="gear__viz viz-frames" aria-hidden="true">
-        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-      </div>
-    </article>
+      <span class="tool__viz viz-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </li>
 
-    <!-- CHATGPT · prompt line typing -->
-    <article class="gear" data-gear="prompt">
-      <p class="gear__id mono">A-02</p>
-      <div class="gear__body">
-        <h3>ChatGPT</h3>
-        <p class="gear__note mono">IDEATION UNIT · DRAFTING &amp; RESEARCH</p>
-      </div>
-      <div class="gear__viz viz-prompt" aria-hidden="true">
-        <span class="viz-prompt__line"></span><span class="viz-prompt__caret"></span>
-      </div>
-    </article>
-
-    <!-- SCRIPT SUPERVISING · timeline markers appear -->
-    <article class="gear" data-gear="markers">
-      <p class="gear__id mono">A-03</p>
-      <div class="gear__body">
+    <li class="tool" data-tool="supervise">
+      <span class="tool__id meta">02</span>
+      <div class="tool__body">
         <h3>Script Supervising</h3>
-        <p class="gear__note mono">CONTINUITY · EDIT LOG · SLATE</p>
+        <p class="tool__note">Continuity, edit log and slate discipline</p>
       </div>
-      <div class="gear__viz viz-markers" aria-hidden="true">
-        <span class="viz-markers__line"></span>
-        <i></i><i></i><i></i><i></i><i></i>
-      </div>
-    </article>
+      <span class="tool__viz viz-marks" aria-hidden="true">
+        <b></b><i></i><i></i><i></i><i></i><i></i>
+      </span>
+    </li>
 
-    <!-- EDITING · film frames move horizontally -->
-    <article class="gear" data-gear="strip">
-      <p class="gear__id mono">A-04</p>
-      <div class="gear__body">
+    <li class="tool" data-tool="edit">
+      <span class="tool__id meta">03</span>
+      <div class="tool__body">
         <h3>Editing</h3>
-        <p class="gear__note mono">POST UNIT · ASSEMBLY &amp; CUT</p>
+        <p class="tool__note">Assembly, edit log and the cut</p>
       </div>
-      <div class="gear__viz viz-strip" aria-hidden="true">
-        <span class="viz-strip__track">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-        </span>
-      </div>
-    </article>
+      <span class="tool__viz viz-strip" aria-hidden="true">
+        <span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+    </li>
 
-    <!-- PROMOTION · poster / light bars -->
-    <article class="gear" data-gear="beam">
-      <p class="gear__id mono">A-05</p>
-      <div class="gear__body">
+    <li class="tool" data-tool="promo">
+      <span class="tool__id meta">04</span>
+      <div class="tool__body">
         <h3>Film Promotion / Marketing</h3>
-        <p class="gear__note mono">PUBLICITY UNIT · RELEASE CAMPAIGN</p>
+        <p class="tool__note">Publicity and release campaigns</p>
       </div>
-      <div class="gear__viz viz-beam" aria-hidden="true">
-        <i></i><i></i><i></i>
-      </div>
-    </article>
-  </div>
+      <span class="tool__viz viz-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </li>
 
-  <!-- LANGUAGES · subtitle treatment -->
-  <div class="langs">
-    <h3 class="langs__title mono reveal">Languages</h3>
-    <div class="subtitle-bar reveal" style="--d:.1s">
-      <p class="subtitle" id="subtitle" aria-hidden="true">Telugu</p>
+    <li class="tool" data-tool="gpt">
+      <span class="tool__id meta">05</span>
+      <div class="tool__body">
+        <h3>ChatGPT</h3>
+        <p class="tool__note">Ideation, drafting and research</p>
+      </div>
+      <span class="tool__viz viz-prompt" aria-hidden="true"><i></i><b></b></span>
+    </li>
+  </ul>
+
+  <div class="langs" data-reveal>
+    <p class="langs__label meta">Languages</p>
+    <div class="langs__bar">
+      <p class="langs__cycle" id="subtitle" aria-hidden="true">Telugu</p>
       <ul class="langs__list">
         <li>Telugu</li><li>English</li><li>Tamil</li>
       </ul>
@@ -510,36 +525,34 @@
 <div class="cut" aria-hidden="true"></div>
 
 <!-- ============================================================
-     SCENE 06 · THE FOUNDATION
+     05 · THE FOUNDATION
      ============================================================ -->
-<section class="scene found" id="education">
-  <p class="slate mono reveal"><b>SC 06</b><span>INT. FILM SCHOOL — FLASHBACK</span><i>TAKE 01</i></p>
-
-  <header class="scene__head">
-    <h2 class="title title--lg reveal">The Foundation</h2>
-    <p class="sub reveal" style="--d:.1s">Training &amp; Education</p>
+<section class="scene found" id="education" data-nav="5">
+  <header class="scene__head" data-reveal>
+    <p class="scene__index meta"><b>05</b><i>/</i><span>Training</span></p>
+    <h2 class="scene__title">The Foundation</h2>
   </header>
 
-  <ol class="credits-list" id="creditsList">
+  <ol class="credits-list">
     <li class="credit">
-      <i class="mono">Degree</i>
-      <div>
-        <b>Bachelor of Engineering</b>
-        <span>Mechanical Engineering</span>
+      <span class="credit__label meta">Degree</span>
+      <div class="credit__body">
+        <h3>Bachelor of Engineering</h3>
+        <p>Mechanical Engineering</p>
       </div>
     </li>
     <li class="credit">
-      <i class="mono">Direction Course</i>
-      <div>
-        <b>Film and Television Institute Hyderabad</b>
-        <span>FTIH Film School</span>
+      <span class="credit__label meta">Direction Course</span>
+      <div class="credit__body">
+        <h3>Film and Television Institute Hyderabad</h3>
+        <p>FTIH Film School</p>
       </div>
     </li>
     <li class="credit">
-      <i class="mono">Practical Work</i>
-      <div>
-        <b>Public Service Announcement (PSA)</b>
-        <span>Completed at FTIH Film School</span>
+      <span class="credit__label meta">Practical Work</span>
+      <div class="credit__body">
+        <h3>Public Service Announcement</h3>
+        <p>Completed at FTIH Film School</p>
       </div>
     </li>
   </ol>
@@ -548,41 +561,39 @@
 <div class="cut" aria-hidden="true"></div>
 
 <!-- ============================================================
-     SCENE 07 · CUT TO BLACK
+     06 · CUT TO BLACK
      ============================================================ -->
-<section class="scene contact" id="contact">
-  <p class="slate mono reveal"><b>SC 07</b><span>EXT. THE NEXT STORY — NIGHT</span><i>FINAL TAKE</i></p>
+<section class="scene contact" id="contact" data-nav="6">
+  <header class="contact__head" data-reveal>
+    <p class="scene__index meta"><b>06</b><i>/</i><span>Final Scene</span></p>
+    <h2 class="contact__title">Cut to Black</h2>
+    <p class="contact__line">“Every story begins with an idea.”</p>
+  </header>
 
-  <div class="contact__head">
-    <h2 class="title title--xl reveal">Cut to Black</h2>
-    <p class="contact__line reveal" style="--d:.12s">“Every story begins with an idea.”</p>
-  </div>
-
-  <ul class="contact__grid">
-    <li class="reveal">
-      <i class="mono">Phone</i>
-      <a href="tel:+919182223468">+91 91822 23468</a>
-    </li>
-    <li class="reveal" style="--d:.08s">
-      <i class="mono">Email</i>
-      <a href="mailto:jaswanthalam25@gmail.com">jaswanthalam25@gmail.com</a>
-    </li>
-    <li class="reveal" style="--d:.16s">
-      <i class="mono">Location</i>
-      <span>Tirupati, India</span>
-    </li>
-    <li class="reveal" style="--d:.24s">
-      <i class="mono">Instagram</i>
-      <a href="https://instagram.com/alam_jaswanth" target="_blank" rel="noopener noreferrer">alam_jaswanth</a>
-    </li>
-  </ul>
-
-  <div class="cta reveal">
-    <p class="cta__title">Let’s create the next story</p>
-    <div class="cta__row">
-      <a class="btn btn--solid" href="mailto:jaswanthalam25@gmail.com">Get in touch</a>
-      <a class="btn" href="#projects">View my work</a>
+  <dl class="contact__grid">
+    <div data-reveal>
+      <dt class="meta">Phone</dt>
+      <dd><a href="tel:+919182223468" data-cursor="OPEN">+91 91822 23468</a></dd>
     </div>
+    <div data-reveal data-delay="1">
+      <dt class="meta">Email</dt>
+      <dd><a href="mailto:jaswanthalam25@gmail.com" data-cursor="OPEN">jaswanthalam25@gmail.com</a></dd>
+    </div>
+    <div data-reveal data-delay="2">
+      <dt class="meta">Location</dt>
+      <dd><span>Tirupati, India</span></dd>
+    </div>
+    <div data-reveal data-delay="3">
+      <dt class="meta">Instagram</dt>
+      <dd><a href="https://instagram.com/alam_jaswanth" target="_blank" rel="noopener noreferrer" data-cursor="OPEN">alam_jaswanth</a></dd>
+    </div>
+  </dl>
+
+  <div class="cta" data-reveal>
+    <h3 class="cta__title">Let’s create the next story</h3>
+    <a class="btn btn--solid btn--lg" href="mailto:jaswanthalam25@gmail.com" data-cursor="OPEN">
+      Get in touch <i class="btn__arrow" aria-hidden="true">→</i>
+    </a>
   </div>
 </section>
 
@@ -594,11 +605,11 @@
 <section class="endroll" id="endroll" aria-label="End credits">
   <div class="endroll__viewport">
     <div class="endroll__inner" id="endrollInner">
-      <p class="endroll__by mono">A film by</p>
+      <p class="endroll__by meta">A film by</p>
       <p class="endroll__name">Alam Jaswanth</p>
-      <p class="endroll__role mono">Aspiring Film Maker</p>
+      <p class="endroll__role meta">Aspiring Film Maker</p>
 
-      <dl class="endroll__credits mono">
+      <dl class="endroll__credits">
         <div><dt>Screenplay</dt><dd>Alam Jaswanth</dd></div>
         <div><dt>Script Development</dt><dd>Alam Jaswanth</dd></div>
         <div><dt>Continuity</dt><dd>Alam Jaswanth</dd></div>
@@ -609,10 +620,10 @@
         <div><dt>Shot In</dt><dd>Tirupati, India</dd></div>
       </dl>
 
-      <p class="endroll__the-end">The End.</p>
-      <p class="endroll__begin" id="endrollBegin">Or maybe... the beginning.</p>
+      <p class="endroll__end">The End.</p>
+      <p class="endroll__begin" id="endrollBegin">Or maybe…<span>the beginning.</span></p>
 
-      <footer class="endroll__foot mono">
+      <footer class="endroll__foot meta">
         <span>© <span id="year">2026</span> Alam Jaswanth</span>
         <span>All frames reserved</span>
       </footer>
@@ -620,62 +631,76 @@
   </div>
 </section>
 
-<button class="rewind mono" id="rewind" type="button" aria-label="Rewind to the top">
-  <span aria-hidden="true">↑</span> REWIND
+<button class="rewind" id="rewind" type="button" aria-label="Back to the top" data-cursor="OPEN">
+  <i aria-hidden="true">↑</i><span class="meta">Rewind</span>
 </button>
 
 <!-- ============================================================
-     PROJECT DETAIL VIEW (cinematic modal)
+     PROJECT DETAIL — FULL-SCREEN EXPERIENCE
      ============================================================ -->
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
-  <div class="modal__backdrop" data-close></div>
-  <div class="modal__shutter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="story" id="story" role="dialog" aria-modal="true" aria-labelledby="storyTitle" hidden>
+  <div class="story__shutter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
-  <div class="modal__panel" role="document">
-    <button class="modal__close" id="modalClose" type="button" aria-label="Close project">✕</button>
-
-    <div class="modal__scroll">
-      <p class="modal__slug mono" id="modalSlug">—</p>
-      <h3 class="modal__title" id="modalTitle">—</h3>
-      <p class="modal__type mono" id="modalType">—</p>
-
-      <div class="modal__hero" id="modalHero" data-cursor="PLAY">
-        <span class="ph mono" id="modalHeroPh" aria-hidden="true">TRAILER PLACEHOLDER</span>
-        <span class="modal__playbtn mono" aria-hidden="true">▶ PLAY</span>
-      </div>
-
-      <div class="modal__body">
-        <section class="modal__block">
-          <h4 class="mono">Synopsis</h4>
-          <p id="modalSyn">—</p>
-        </section>
-
-        <section class="modal__block">
-          <h4 class="mono">Role &amp; Responsibilities</h4>
-          <ul class="tags" id="modalRole"></ul>
-        </section>
-
-        <section class="modal__block">
-          <h4 class="mono">Film Stills</h4>
-          <div class="stills" id="modalStills"></div>
-        </section>
-
-        <section class="modal__block">
-          <h4 class="mono">Credits</h4>
-          <dl class="modal__credits mono" id="modalCredits"></dl>
-        </section>
-
-        <section class="modal__block">
-          <h4 class="mono">Behind the Scenes</h4>
-          <div class="stills stills--bts" id="modalBts"></div>
-        </section>
-
-        <section class="modal__block">
-          <h4 class="mono">Links</h4>
-          <div class="modal__links" id="modalLinks"></div>
-        </section>
-      </div>
+  <div class="story__scroll" id="storyScroll">
+    <div class="story__bar">
+      <button class="back" id="storyClose" type="button" data-cursor="OPEN">
+        <i class="back__arrow" aria-hidden="true">←</i><span class="meta">Back to work</span>
+      </button>
+      <p class="story__count meta"><b id="storyNum">01</b><i>/</i><span>04</span></p>
     </div>
+
+    <header class="story__head">
+      <p class="story__type meta" id="storyType">—</p>
+      <h2 class="story__title" id="storyTitle">—</h2>
+      <p class="story__role" id="storyRole">—</p>
+    </header>
+
+    <div class="story__hero" id="storyHero" data-cursor="PLAY">
+      <span class="ph meta" id="storyHeroPh" aria-hidden="true">Trailer<i>—</i></span>
+      <span class="story__play meta" aria-hidden="true">Play <i>→</i></span>
+    </div>
+
+    <div class="story__cols">
+      <div class="story__main">
+        <section class="story__block">
+          <h3 class="meta">Description</h3>
+          <p class="story__text" id="storySyn">—</p>
+        </section>
+
+        <section class="story__block">
+          <h3 class="meta">Role &amp; Responsibilities</h3>
+          <ul class="tags" id="storyDuties"></ul>
+        </section>
+
+        <section class="story__block">
+          <h3 class="meta">Visuals</h3>
+          <div class="plates" id="storyStills"></div>
+        </section>
+
+        <section class="story__block">
+          <h3 class="meta">Behind the Scenes</h3>
+          <div class="plates plates--bts" id="storyBts"></div>
+        </section>
+      </div>
+
+      <aside class="story__side">
+        <section class="story__block">
+          <h3 class="meta">Credits</h3>
+          <dl class="story__credits" id="storyCredits"></dl>
+        </section>
+
+        <section class="story__block">
+          <h3 class="meta">Links</h3>
+          <div class="story__links" id="storyLinks"></div>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="story__foot">
+      <button class="btn" id="storyCloseFoot" type="button" data-cursor="OPEN">
+        <i class="btn__arrow btn__arrow--back" aria-hidden="true">←</i> Back to work
+      </button>
+    </footer>
   </div>
 </div>
 
