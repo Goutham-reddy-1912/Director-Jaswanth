@@ -404,7 +404,7 @@
       syn: 'A YouTube web series. Alam worked as assistant director — writing screenplay and dialogues, then holding continuity and costumes together through the shoot.',
       duties: ['Screenplay writing', 'Dialogue writing', 'Edit log', 'Costumes', 'Continuity'],
       credits: [['Role', 'Assistant Director'], ['Format', 'Web Series'], ['Platform', 'YouTube'], ['Cast & Crew', 'TBA'], ['Year', 'TBA']],
-      trailer: 'Add the episode or trailer embed here',
+      trailer: 'Footage not yet available',
       links: ['Episode link — TBA', 'Trailer — TBA']
     },
     'faded': {
@@ -415,7 +415,7 @@
       syn: 'An independent film running 45 minutes, co-directed by Alam Jaswanth. He wrote the entire script and carried continuity, properties and costumes on set.',
       duties: ['Entire script writing', 'Edit log', 'Continuity', 'Properties', 'Costumes'],
       credits: [['Role', 'Assistant Director / Co-Director'], ['Format', 'Independent Film'], ['Runtime', '45 minutes'], ['Cast & Crew', 'TBA'], ['Year', 'TBA']],
-      trailer: 'Add the film or trailer embed here',
+      trailer: 'Footage not yet available',
       links: ['Full film — TBA', 'Trailer — TBA']
     },
     'feature-ad': {
@@ -426,7 +426,7 @@
       syn: 'Feature film work as assistant director, spanning script development and the on-set departments. The title and further details will be added once they can be shared publicly.',
       duties: ['Script development', 'Edit log', 'Continuity', 'Properties', 'Costumes'],
       credits: [['Role', 'Assistant Director'], ['Format', 'Feature Film'], ['Title', 'TBA'], ['Cast & Crew', 'TBA'], ['Year', 'TBA']],
-      trailer: 'Poster or teaser to be added',
+      trailer: 'Footage not yet available',
       links: ['Details — TBA']
     },
     'feature-assoc': {
@@ -472,11 +472,11 @@
       }).join('');
 
       $('#storyStills').innerHTML = [1, 2, 3, 4].map(function (i) {
-        return '<div>Still ' + pad2(i) + ' · add image</div>';
+        return '<div>Still ' + pad2(i) + '<i>Not yet available</i></div>';
       }).join('');
 
       $('#storyBts').innerHTML = [1, 2].map(function (i) {
-        return '<div>BTS ' + pad2(i) + ' · add photo</div>';
+        return '<div>BTS ' + pad2(i) + '<i>Not yet available</i></div>';
       }).join('');
 
       $('#storyLinks').innerHTML = d.links.map(function (l) {
@@ -524,6 +524,34 @@
       var first = f[0], last = f[f.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  }
+
+  /* ---------- SHOWREEL ----------
+     The markup ships without a video on purpose. The moment a <video
+     id="reelVideo"> exists, the button becomes a real play control; until
+     then it stays honestly disabled rather than pretending to work. */
+  function initReel() {
+    var stage = $('#reelStage'), btn = $('#reelPlay'), vid = $('#reelVideo');
+    if (!btn || !stage) { return; }
+
+    if (!vid) {
+      btn.setAttribute('aria-disabled', 'true');
+      btn.setAttribute('title', 'Showreel coming soon');
+      btn.addEventListener('click', function () {
+        stage.classList.add('is-waiting');
+        setTimeout(function () { stage.classList.remove('is-waiting'); }, 1400);
+      });
+      return;
+    }
+
+    btn.removeAttribute('aria-disabled');
+    btn.setAttribute('aria-label', 'Play showreel');
+    btn.addEventListener('click', function () {
+      stage.classList.add('is-playing');
+      btn.hidden = true;
+      var p = vid.play();
+      if (p && p.catch) { p.catch(function () { vid.controls = true; }); }
     });
   }
 
@@ -675,6 +703,7 @@
   }
 
   initStory();
+  initReel();
   initSubtitles();
   initMisc();
 

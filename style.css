@@ -210,6 +210,13 @@ section[id]{scroll-margin-top:var(--s8)}
   background:var(--accent);border-color:var(--accent);color:#120d04;
 }
 .btn--lg{padding:var(--s3) var(--s6);font-size:.84rem}
+.btn--ghost{
+  border-color:var(--line);
+  color:var(--fg-2);
+  font-size:.72rem;
+  padding:var(--s2) var(--s3);
+}
+.btn--ghost:hover{color:var(--fg)}
 
 /* underline that grows */
 .ul-link{position:relative;display:inline-block}
@@ -866,12 +873,16 @@ body.is-ready .line > span{transform:none}
 }
 
 .hero__role{
-  font-size:clamp(.82rem,1.7vw,1.1rem);
+  font-size:clamp(.72rem,1.5vw,1rem);
   font-weight:600;
-  letter-spacing:.34em;
+  letter-spacing:.2em;
   text-transform:uppercase;
   color:var(--fg-2);
 }
+/* three roles is a long string — it must be allowed to wrap. Only the
+   name is locked to one line. */
+.hero__role .line{white-space:normal}
+.hero__role i{font-style:normal;color:var(--accent);opacity:.7;margin:0 .1em}
 
 .hero__say{
   grid-area:say;
@@ -910,6 +921,102 @@ body.is-ready .line > span{transform:none}
   0%{transform:translateX(-100%)}
   62%,100%{transform:translateX(265%)}
 }
+
+/* ---------- SHOWREEL ---------- */
+.reel__frame{margin:0}
+.reel__stage{
+  position:relative;
+  aspect-ratio:21/9;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:
+    radial-gradient(80% 120% at 50% 0%,#141419,#0a0a0c 70%);
+  display:grid;place-items:center;
+}
+.reel__video{width:100%;height:100%;object-fit:cover;display:block}
+
+/* bars at the top, caption at the bottom — the centre stays clear for the
+   play control rather than stacking on top of it */
+.reel__empty{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  text-align:center;
+  padding:clamp(20px,4vw,40px) var(--s4);
+}
+.reel__empty p{font-size:.6rem}
+/* an audio-meter idle: something is alive in the frame */
+.reel__bars{display:flex;align-items:flex-end;gap:5px;height:34px}
+.reel__bars i{
+  width:3px;height:8px;background:var(--fg-3);transform-origin:bottom;
+  animation:reelBar 1.9s ease-in-out infinite;
+}
+.reel__bars i:nth-child(2){animation-delay:.18s}
+.reel__bars i:nth-child(3){animation-delay:.36s}
+.reel__bars i:nth-child(4){animation-delay:.54s}
+.reel__bars i:nth-child(5){animation-delay:.72s}
+@keyframes reelBar{0%,100%{transform:scaleY(1)}50%{transform:scaleY(3.4)}}
+
+/* inset + margin:auto centres it without spending the transform, which the
+   press and hover states need */
+.reel__play{
+  position:absolute;inset:0;margin:auto;
+  display:grid;place-items:center;
+  width:84px;height:84px;
+  border-radius:50%;
+  cursor:pointer;
+  transition:transform var(--t) var(--e);
+}
+.reel__play-ring{
+  position:absolute;inset:0;
+  border:1px solid rgba(239,236,229,.35);
+  border-radius:50%;
+  transition:border-color var(--t),background-color var(--t),transform var(--t) var(--e);
+}
+.reel__play-tri{
+  width:0;height:0;margin-left:5px;
+  border-left:15px solid var(--fg);
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+  transition:border-left-color var(--t);
+}
+.reel__play:hover .reel__play-ring,.reel__play:focus-visible .reel__play-ring{
+  background:var(--accent);border-color:var(--accent);transform:scale(1.06);
+}
+.reel__play:hover .reel__play-tri{border-left-color:#120d04}
+.reel__play:active{transform:scale(.95)}
+/* a slow pulse so the frame reads as playable */
+.reel__play::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(239,236,229,.25);
+  animation:reelPulse 3.4s var(--e-io) infinite;
+}
+@keyframes reelPulse{
+  0%{transform:scale(1);opacity:.6}
+  70%,100%{transform:scale(1.5);opacity:0}
+}
+
+/* pressed while there is still no reel to play */
+.reel__stage.is-waiting .reel__empty p{color:var(--accent)}
+.reel__stage.is-waiting .reel__bars i{background:var(--accent)}
+.reel__stage.is-playing .reel__empty,
+.reel__stage.is-playing .reel__bars{display:none}
+
+.reel__grain{
+  position:absolute;inset:-50%;pointer-events:none;
+  opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+.reel__tag{
+  position:absolute;
+  display:flex;align-items:center;gap:6px;
+  font-size:.54rem;color:rgba(239,236,229,.45);
+}
+.reel__tag--l{top:var(--s3);left:var(--s3)}
+.reel__tag--r{top:var(--s3);right:var(--s3)}
+
+.reel__cap{margin-top:var(--s3)}
+.reel__cap .meta{font-size:.58rem}
 
 /* ---------- 06 · SCENE FURNITURE ---------- */
 .scene{
@@ -1255,6 +1362,36 @@ body.is-ready .line > span{transform:none}
   font-size:.62rem;color:var(--fg-2);
 }
 
+/* THE SLATE FRAME — no poster stills exist for any film, so this is the
+   designed final presentation rather than a "missing image" state: a large
+   frame number, a crosshair (the way a viewfinder marks its centre), grain
+   and the same hover sweep as a photographic frame would get. */
+.film__frame--slate{
+  display:grid;place-items:center;
+  background:
+    radial-gradient(120% 90% at 50% 8%,rgba(216,163,76,.05),transparent 60%),
+    var(--coal);
+}
+.film__slate-num{
+  font-size:clamp(3.6rem,11vw,6.5rem);
+  font-weight:800;
+  letter-spacing:-.03em;
+  color:rgba(239,236,229,.14);
+  transition:color var(--t-slow) var(--e-io);
+}
+.film__btn:hover .film__slate-num,.film__btn:focus-visible .film__slate-num{
+  color:rgba(216,163,76,.32);
+}
+/* viewfinder corner brackets — the universal "this is a camera frame" mark */
+.film__crosshair{position:absolute;inset:clamp(16px,5%,28px);pointer-events:none}
+.film__crosshair::before,.film__crosshair::after{
+  content:'';position:absolute;width:16px;height:16px;
+  border:1px solid var(--line-2);
+}
+.film__crosshair::before{top:0;left:0;border-right:0;border-bottom:0}
+.film__crosshair::after{bottom:0;right:0;border-left:0;border-top:0}
+.film--tba .film__slate-num{color:rgba(239,236,229,.09)}
+
 .film__meta{display:flex;flex-direction:column;gap:var(--s1);padding-top:var(--s3)}
 .film__top{display:flex;gap:var(--s2);font-size:.6rem}
 .film__top i{font-style:normal}
@@ -1308,7 +1445,28 @@ body.is-ready .line > span{transform:none}
 .tool__note{margin-top:4px;font-size:.8rem;font-weight:300;color:var(--fg-3)}
 .tool__viz{position:relative;display:flex;align-items:center;justify-content:flex-end;height:32px;gap:4px}
 
-/* 01 screenwriting — script lines draw in */
+/* 01 direction — frames light up across the gate */
+.viz-frames{gap:5px}
+.viz-frames i{
+  width:15px;height:21px;flex:none;
+  border:1px solid var(--line-2);
+  opacity:.3;
+  transition:opacity var(--t) var(--e),background-color var(--t) var(--e);
+}
+.tool.is-in .viz-frames i{opacity:1}
+.tool.is-in .viz-frames i:nth-child(2){transition-delay:.08s}
+.tool.is-in .viz-frames i:nth-child(3){transition-delay:.16s}
+.tool.is-in .viz-frames i:nth-child(4){transition-delay:.24s}
+.tool.is-in .viz-frames i:nth-child(5){transition-delay:.32s}
+.tool.is-in .viz-frames i:nth-child(6){transition-delay:.4s}
+.tool:hover .viz-frames i{background:var(--accent);border-color:var(--accent)}
+.tool:hover .viz-frames i:nth-child(2){transition-delay:.06s}
+.tool:hover .viz-frames i:nth-child(3){transition-delay:.12s}
+.tool:hover .viz-frames i:nth-child(4){transition-delay:.18s}
+.tool:hover .viz-frames i:nth-child(5){transition-delay:.24s}
+.tool:hover .viz-frames i:nth-child(6){transition-delay:.3s}
+
+/* 02 screenwriting — script lines draw in */
 .viz-lines{flex-direction:column;align-items:flex-end;gap:5px}
 .viz-lines i{
   display:block;height:1.5px;background:var(--fg-3);
@@ -1464,6 +1622,13 @@ body.is-ready .line > span{transform:none}
   font-weight:700;letter-spacing:-.028em;line-height:1.2;
 }
 .credit__body p{margin-top:6px;color:var(--fg-2);font-weight:300}
+/* film training carries more weight than the engineering degree */
+.credit--lead .credit__label{color:var(--accent);opacity:1}
+.credit--lead .credit__body h3{font-size:clamp(1.35rem,3.2vw,2.15rem)}
+.credit:not(.credit--lead) .credit__body h3{
+  font-size:clamp(1.05rem,2.2vw,1.4rem);
+  font-weight:600;color:var(--fg-2);
+}
 
 /* ---------- 13 · CONTACT ---------- */
 .contact__head{text-align:center;margin-bottom:clamp(48px,8vh,96px)}
@@ -1514,7 +1679,12 @@ body.is-ready .line > span{transform:none}
   font-weight:700;letter-spacing:-.035em;line-height:1.05;
   max-width:22ch;margin-inline:auto;
 }
-.cta .btn{margin-top:var(--s6)}
+.cta__row{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:var(--s2);
+  margin-top:var(--s6);
+}
+.cta__row--minor{margin-top:var(--s3)}
 
 /* ---------- 14 · END CREDITS ---------- */
 .endroll{position:relative;height:250vh;background:#000;border-top:1px solid var(--line)}
@@ -1680,12 +1850,17 @@ body.is-ready .line > span{transform:none}
 .plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--s1)}
 .plates > div{
   position:relative;aspect-ratio:16/9;
-  display:grid;place-items:center;text-align:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  text-align:center;
   padding:var(--s2);
   border:1px dashed var(--line);border-radius:var(--r);
   background:repeating-linear-gradient(45deg,rgba(239,236,229,.026) 0 8px,transparent 8px 16px),var(--coal);
   font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
   color:var(--fg-3);
+}
+.plates > div i{
+  font-style:normal;font-weight:400;letter-spacing:.02em;text-transform:none;
+  font-size:.62rem;opacity:.55;
 }
 .plates--bts > div{aspect-ratio:4/3}
 
@@ -1860,10 +2035,68 @@ body.is-ready .line > span{transform:none}
   .plates{grid-template-columns:1fr 1fr}
 }
 
+/* ---------- MOBILE COMPOSITION ----------
+   Not a stacked desktop. Sections are re-proportioned for a thumb: bigger
+   touch targets, tighter rhythm, no horizontal overflow anywhere, and the
+   heavy atmospheric layers switched off rather than scaled down. */
+@media (max-width:760px){
+  :root{--scene-y:clamp(64px,9vh,96px)}
+
+  /* every tap target clears 44px */
+  .nav__toggle{width:44px;height:44px}
+  .icon-btn{width:48px;height:48px}
+  .btn{padding:var(--s2) var(--s4);min-height:48px}
+  .btn--lg{padding:var(--s3) var(--s4);font-size:.78rem}
+  .btn--ghost{min-height:48px;flex:1 1 auto;justify-content:center}
+  .cta__row .btn{width:100%}
+  .cta__row--minor .btn{width:auto;min-width:calc(50% - var(--s1))}
+
+  .hero__role{letter-spacing:.14em;font-size:.74rem}
+
+  /* 21:9 is a letterbox slit on a phone — 16:9 keeps the frame readable */
+  .reel__stage{aspect-ratio:16/9;border-radius:var(--r)}
+  .reel__play{width:64px;height:64px}
+  .reel__play-tri{border-left-width:13px;border-top-width:9px;border-bottom-width:9px}
+  .reel__tag--r{display:none}
+  .reel__cap{gap:var(--s1) var(--s4)}
+  .reel__cap .meta{font-size:.55rem}
+
+  /* the journey reads as one continuous strip on a narrow screen */
+  .tl-role{font-size:clamp(1.2rem,6vw,1.6rem)}
+  .tl-note{font-size:.92rem}
+  .scene__lead{font-size:1rem}
+
+  .tool{padding:var(--s3) 0}
+  .tool__body h3{font-size:clamp(1.05rem,5vw,1.35rem)}
+  .tool__note{font-size:.74rem}
+
+  .contact__title{line-height:1}
+  .contact__grid dd{font-size:1rem}
+}
+
 @media (max-width:480px){
   .facts dt{min-width:auto;flex:1 1 100%}
   .tags li{font-size:.62rem}
   .plates{grid-template-columns:1fr}
+  .film{flex:0 0 88vw}
+  .rail__end{flex:0 0 140px;padding-left:var(--s3)}
+  .cta__row--minor .btn{width:100%;min-width:0}
+  .reel__empty p{font-size:.55rem}
+  .endroll__foot{justify-content:center;text-align:center}
+}
+
+/* 320–360px: the tightest real devices. Nothing may overflow here. */
+@media (max-width:380px){
+  :root{--gutter:18px}
+  .hero__title{font-size:clamp(2.2rem,13.5vw,3rem)}
+  .hero__role{font-size:.68rem;letter-spacing:.1em}
+  .scene__title{font-size:clamp(1.75rem,9vw,2.4rem)}
+  .contact__title{font-size:clamp(2rem,12vw,2.8rem)}
+  .cta__title{font-size:clamp(1.3rem,7vw,1.8rem)}
+  .shot{width:92%}
+  .slate,.scene__index{flex-wrap:wrap}
+  .tl-scene{gap:var(--s1)}
+  .reel__tag--l{font-size:.5rem}
 }
 
 /* touch: no hover-only affordances */
@@ -1906,6 +2139,8 @@ body.is-ready .line > span{transform:none}
   .hero__set span{animation:none}
   .still__sweep{display:none}
   .rec{animation:none}
+  .reel__bars i,.reel__play::after{animation:none}
+  .reel__play::after{opacity:0}
   .endroll{height:auto}
   .endroll__viewport{position:static;height:auto;padding:var(--s9) 0;mask:none;-webkit-mask:none}
   .endroll__inner{transform:none}
