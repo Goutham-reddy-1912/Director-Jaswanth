@@ -31,7 +31,10 @@
     .hero__cta,.hero__scroll,.shot,.shot__frame,.shot__tag,.shot__halo{
       opacity:1 !important;transform:none !important}
     .hero__atmos{opacity:.34 !important}
-    .still,.shot__img{--focus-blur:0px !important;--zoom:1 !important}
+    .shot__head,.shot__img{transform:none !important}
+    .shot__shade{opacity:0 !important}
+    .still,.shot__img,.shot__head{
+      --focus-blur:0px !important;--zoom:1 !important;--crop-y:8% !important}
     /* the reveal mask must land open, or the frame stays hidden */
     .shot__frame{-webkit-mask-position:100% 0 !important;mask-position:100% 0 !important}
     .endroll{height:auto !important}
@@ -157,8 +160,27 @@
     <span class="hero__sweep"></span>
   </div>
 
-  <!-- LAYER 2 · atmosphere: the same file, blurred far past recognition,
-       so it reads as depth behind the frame rather than a second image -->
+  <!-- LAYER 2 · FILM-SET ATMOSPHERE
+       Out-of-focus production lights drifting through a dark studio, built
+       in CSS because no video asset exists — deliberately, rather than
+       dropping in unrelated stock footage.
+
+       VIDEO-READY: to use real footage instead, uncomment the block below
+       and drop the file in assets/video/. The CSS layer stays as the poster
+       and as the fallback for reduced-motion and low-power devices.
+
+       <video class="hero__reel" autoplay muted loop playsinline
+              preload="none" aria-hidden="true"
+              poster="assets/Imgs/imgg_1.png">
+         <source src="assets/video/set.mp4" type="video/mp4">
+       </video>
+  -->
+  <div class="hero__set" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+
+  <!-- LAYER 3 · the same portrait, blurred far past recognition, so it
+       reads as depth behind the frame rather than a second image -->
   <div class="hero__atmos" aria-hidden="true"></div>
 
   <canvas class="hero__dust" id="dust" aria-hidden="true"></canvas>
@@ -185,19 +207,35 @@
       <span class="shot__halo" aria-hidden="true"></span>
 
       <div class="shot__frame" data-cursor="VIEW FRAME">
-        <div class="shot__img still still--native"
-             style="--focus-x:56%; --focus-y:19%; --origin-y:24%; --crop-y:8%">
+
+        <!-- BODY LAYER — holds still. Only the camera moves it. -->
+        <div class="shot__img still still--native">
           <img src="assets/Imgs/imgg_1.png"
                alt="Alam Jaswanth, photographed against a dark studio backdrop"
                fetchpriority="high" decoding="async">
           <span class="still__grain" aria-hidden="true"></span>
           <span class="still__sweep" aria-hidden="true"></span>
         </div>
+
+        <!-- HEAD LAYER — the same file, registered pixel-for-pixel on top of
+             the body, then masked to a band running from above the head down
+             into the chest, where the shirt is near-black and holds no detail.
+             This band is what rises; the seam dissolves across ~20% of the
+             frame so the shoulders never show a joint. -->
+        <div class="shot__head still still--native" aria-hidden="true">
+          <img src="assets/Imgs/imgg_1.png" alt="" decoding="async">
+        </div>
+
+        <!-- the light arriving on the face -->
+        <span class="shot__shade" aria-hidden="true"></span>
         <span class="shot__scrim" aria-hidden="true"></span>
       </div>
 
-      <!-- LAYER 4 · metadata. Two marks, nothing more. -->
-      <span class="shot__tag shot__tag--frame meta" aria-hidden="true"><i class="rec"></i>Frame 01</span>
+      <!-- camera marks. They arrive during the take and settle. -->
+      <span class="shot__tag shot__tag--rec meta" aria-hidden="true">
+        <i class="rec"></i>Rec <b id="timecode">00:00:00:00</b>
+      </span>
+      <span class="shot__tag shot__tag--frame meta" aria-hidden="true">Frame 01</span>
       <span class="shot__tag shot__tag--cut meta" aria-hidden="true">Director’s Cut</span>
     </figure>
 

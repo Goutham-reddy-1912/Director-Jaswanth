@@ -527,23 +527,42 @@
     });
   }
 
+  /* ---------- TIMECODE ----------
+     Runs at 24fps through the opening take, then stops for good. No idle
+     loop, no scroll listener — it is a one-shot that settles. */
+  function initTimecode() {
+    var el = $('#timecode');
+    if (!el) { return; }
+    var RUN = 1900;                       // the length of the take
+    if (REDUCED) { el.textContent = '00:00:01:21'; return; }
+
+    var t0 = 0;
+    function frame(now) {
+      if (!t0) { t0 = now; }
+      var ms = Math.min(RUN, now - t0);
+      var f = Math.floor(ms / 1000 * 24);
+      el.textContent = '00:00:' + pad2(Math.floor(f / 24)) + ':' + pad2(f % 24);
+      if (ms < RUN) { requestAnimationFrame(frame); }
+    }
+    requestAnimationFrame(frame);
+  }
+
   /* ---------- THE OPENING SHOT · CURSOR DRIFT ---------- */
   function initShot() {
     var frame = $('.shot__frame');
-    var img = $('.shot__img');
-    if (!frame || !img || REDUCED || !FINE) { return; }
+    if (!frame || REDUCED || !FINE) { return; }
 
-    // the frame leans a few pixels toward the cursor — enough to feel alive,
-    // not enough to notice as an effect
+    // set on the frame, not on a layer: the body and the head band both
+    // inherit it, so they can never drift apart and split the seam
     frame.addEventListener('mousemove', function (e) {
       var b = frame.getBoundingClientRect();
-      img.style.setProperty('--mx', (((e.clientX - b.left) / b.width) * 2 - 1).toFixed(3));
-      img.style.setProperty('--my', (((e.clientY - b.top) / b.height) * 2 - 1).toFixed(3));
+      frame.style.setProperty('--mx', (((e.clientX - b.left) / b.width) * 2 - 1).toFixed(3));
+      frame.style.setProperty('--my', (((e.clientY - b.top) / b.height) * 2 - 1).toFixed(3));
     }, { passive: true });
 
     frame.addEventListener('mouseleave', function () {
-      img.style.setProperty('--mx', '0');
-      img.style.setProperty('--my', '0');
+      frame.style.setProperty('--mx', '0');
+      frame.style.setProperty('--my', '0');
     });
   }
 
@@ -647,6 +666,7 @@
     if (started) { return; }
     started = true;
     initCursor();
+    initTimecode();
     initShot();
     initDust();
     initReveals();
